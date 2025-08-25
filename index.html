@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boys‑Trip Beslis‑Machine ☀️</title>
+  <meta name="description" content="Omdat niemand wat kan kiezen. Deze chaotische zonnegod kiest voor jullie.">
+  <style>
+    :root{
+      --sun: #FFD166;
+      --ocean: #06D6A0;
+      --sky: #118AB2;
+      --coral: #EF476F;
+      --sand: #FFE29A;
+      --ink: #073B4C;
+      --white: #fff;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: var(--ink);
+      overflow-x:hidden;
+      background: radial-gradient(1200px 800px at 25% -10%, #fff6cf 0%, transparent 60%),
+                  radial-gradient(1200px 800px at 120% 120%, #d4fff8 0%, transparent 60%),
+                  linear-gradient(135deg, #FFF6E0, #E2FBFF 60%, #FFF0F6);
+      animation: bgShift 16s linear infinite;
+    }
+    @keyframes bgShift {
+      0% { filter: hue-rotate(0deg) }
+      50% { filter: hue-rotate(20deg) }
+      100% { filter: hue-rotate(0deg) }
+    }
+
+    /* Chaotische lagen */
+    .layer-sun {
+      position: fixed; inset: -20vmin;
+      background:
+        conic-gradient(from 0deg, rgba(255,209,102,.35), rgba(255,209,102,0) 30deg) center/100% 100% no-repeat;
+      mix-blend-mode:multiply; pointer-events:none;
+      animation: rays 12s linear infinite;
+      z-index: 0;
+    }
+    @keyframes rays { to { transform: rotate(1turn) } }
+
+    .layer-waves {
+      position: fixed; left:0; right:0; bottom:-5vmin; height: 45vmin;
+      background:
+        repeating-linear-gradient( to right,
+          rgba(17,138,178,.15) 0 14px, rgba(6,214,160,.15) 14px 28px),
+        radial-gradient(40% 70% at 60% 30%, rgba(6,214,160,.25), transparent 60%),
+        radial-gradient(40% 70% at 30% 60%, rgba(17,138,178,.25), transparent 60%);
+      filter: blur(2px);
+      animation: swell 6s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes swell { 50% { transform: translateY(1.5vmin) } }
+
+    /* Chaotische emoji stickers die drijven */
+    .stickers { position: fixed; inset:0; pointer-events:none; z-index:1; }
+    .sticker {
+      position:absolute; font-size: clamp(20px, 4vmin, 42px);
+      filter: drop-shadow(0 6px 6px rgba(0,0,0,.15));
+      animation: float var(--dur, 10s) ease-in-out infinite, wiggle 2.6s ease-in-out infinite;
+      opacity:.9;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0) rotate(0) }
+      50%{ transform: translateY(-5vmin) translateX(2vmin) rotate(6deg) }
+      100%{ transform: translateY(0) translateX(0) rotate(0) }
+    }
+    @keyframes wiggle {
+      0%,100% { transform: translateZ(0) rotate(-2deg) }
+      50% { transform: translateZ(0) rotate(2deg) }
+    }
+
+    /* App container */
+    .wrap{
+      position: relative; z-index: 2;
+      min-height: 100dvh;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding: 6vmin 4vmin;
+      gap: 2rem;
+    }
+
+    .card {
+      width:min(920px, 95vw);
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(6px);
+      border: 3px dashed color-mix(in oklab, var(--sun), var(--coral));
+      border-radius: 20px;
+      padding: clamp(16px, 3vmin, 28px);
+      box-shadow: 0 20px 40px rgba(7,59,76,.15), inset 0 0 40px rgba(255,255,255,.4);
+      animation: popIn .9s cubic-bezier(.2,.9,.2,1) 1;
+    }
+    @keyframes popIn {
+      0%{ transform: scale(.92) rotate(-1.5deg); opacity:0 }
+      100%{ transform: scale(1) rotate(0); opacity:1 }
+    }
+
+    header h1{
+      margin:.25rem 0 0; font-size: clamp(28px, 6.4vmin, 56px);
+      letter-spacing:.5px;
+      text-shadow: 0 6px 0 #ffe9a9, 0 8px 18px rgba(0,0,0,.2);
+    }
+    header p {
+      margin:.5rem 0 0; font-size: clamp(14px, 2.4vmin, 20px);
+      color: #2c4b57;
+    }
+
+    .controls{
+      display:grid; grid-template-columns: 1fr auto; gap:.75rem;
+      align-items:start; margin-top: 1rem;
+    }
+    .input{
+      display:flex; gap:.5rem; align-items:center; background:#fff; border-radius:14px; padding:.4rem .6rem;
+      border:2px solid color-mix(in oklab, var(--sky), #fff 45%);
+      box-shadow: 0 8px 18px rgba(0,0,0,.08);
+    }
+    .input input{
+      border:none; outline:none; font-size:1rem; padding:.7rem .6rem; flex:1; background:transparent;
+    }
+    .btn{
+      appearance:none; border:none; border-radius:14px; padding:.9rem 1.1rem; cursor:pointer;
+      color:#05323d; font-weight:800; letter-spacing:.3px;
+      background: linear-gradient(135deg, var(--sun), var(--ocean));
+      box-shadow: 0 10px 18px rgba(17,138,178,.22), inset 0 -2px 0 rgba(0,0,0,.08);
+      transform: translateY(0);
+      transition: transform .08s ease, filter .2s ease;
+      position:relative; overflow:hidden;
+    }
+    .btn:hover { filter: saturate(1.2) brightness(1.05) }
+    .btn:active { transform: translateY(2px) }
+    .btn--ghost{
+      background: linear-gradient(135deg, #fff, #fff);
+      border:2px solid var(--sky); color: var(--ink);
+    }
+
+    .chips{
+      display:flex; flex-wrap:wrap; gap:.5rem; margin-top: .75rem;
+    }
+    .chip{
+      background: color-mix(in oklab, var(--sand), #fff 20%);
+      border:2px solid color-mix(in oklab, var(--sun), #000 5%);
+      padding:.45rem .75rem; border-radius:999px; display:inline-flex; align-items:center; gap:.5rem;
+      font-weight:700; color:#3b4951;
+      animation: chipIn .25s ease;
+    }
+    @keyframes chipIn { from { transform: scale(.8) rotate(-6deg); opacity:0 } }
+
+    .chip button{
+      background: none; border:none; cursor:pointer; font-size:1rem; line-height:1; padding:.1rem .2rem;
+      transform: translateY(0); transition: transform .1s ease; color:#8a3a42
+    }
+    .chip button:hover { transform: translateY(-1px) rotate(8deg) }
+
+    .status{
+      margin-top:.5rem; font-size:.95rem; color:#3a5864;
+    }
+
+    .actions{
+      display:flex; gap:.6rem; flex-wrap:wrap; margin-top: 1rem;
+    }
+
+    .result{
+      margin-top: 1.2rem;
+      display:grid; place-items:center;
+      min-height: 130px;
+      border-radius: 16px;
+      background: repeating-linear-gradient(-45deg, rgba(255,209,102,.22) 0 14px, rgba(6,214,160,.14) 14px 28px);
+      border:2px dashed color-mix(in oklab, var(--coral), #fff 40%);
+      overflow:hidden;
+      position:relative;
+    }
+    .slot {
+      font-size: clamp(26px, 5.2vmin, 46px);
+      font-weight: 900;
+      text-transform: uppercase;
+      color:#082a31;
+      text-align:center;
+      padding: 24px 14px;
+      min-width: 80%;
+      animation: none;
+      text-shadow: 0 4px 0 rgba(255,255,255,.9), 0 8px 20px rgba(0,0,0,.15);
+    }
+    .slot.spin { animation: slotSpin .9s cubic-bezier(.2,.8,.2,1) infinite }
+    @keyframes slotSpin {
+      0%{ transform: translateY(0); filter: blur(0) }
+      50%{ transform: translateY(-12px) scale(1.02); filter: blur(1px) }
+      100%{ transform: translateY(0); filter: blur(0) }
+    }
+    .slot.win { animation: winPop .9s cubic-bezier(.2,1.2,.2,1) 1 }
+    @keyframes winPop {
+      0%{ transform: scale(.85) rotate(-6deg); opacity:.2 }
+      40%{ transform: scale(1.15) rotate(4deg); opacity:1 }
+      100%{ transform: scale(1) rotate(0) }
+    }
+
+    .badge{
+      position:absolute; top:10px; right:10px;
+      background: var(--coral); color:white; font-weight:900;
+      padding:.35rem .6rem; border-radius:10px;
+      transform: rotate(6deg);
+      box-shadow:0 8px 16px rgba(239,71,111,.25);
+      animation: pulse .9s ease-in-out infinite;
+    }
+    @keyframes pulse { 50%{ transform: rotate(6deg) scale(1.06) } }
+
+    .snark{
+      margin-top: .8rem;
+      font-size: .98rem;
+      color:#425f6a;
+      display:flex; align-items:center; gap:.5rem;
+    }
+    .snark b { color:#0e4a58 }
+
+    footer{
+      color:#33545e; font-size:.9rem; text-align:center; opacity:.9;
+    }
+
+    /* Confetti */
+    .confetti{
+      position:absolute; inset:0; pointer-events:none; overflow:hidden;
+    }
+    .confetti .p{
+      position:absolute; width:10px; height:18px; border-radius:2px;
+      will-change: transform;
+      animation: fall var(--t, 1400ms) linear forwards, spin2 var(--r, 900ms) ease-in-out infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(120vh) translateX(var(--x, 0px)) rotate(var(--rot, 0deg)) }
+    }
+    @keyframes spin2 {
+      50% { transform: translateY(50vh) }
+    }
+
+    /* Overdreven hover animaties */
+    .btn:hover .sparkle { opacity:1; transform: translate(-50%,-50%) scale(1.1) }
+    .sparkle{
+      position:absolute; left:50%; top:50%; width:220%; height:220%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);
+      mix-blend-mode: screen; opacity:0; transition: .25s ease; border-radius:50%;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 520px){
+      .actions { justify-content: center }
+      .badge { display:none }
+    }
+  </style>
+</head>
+<body>
+  <!-- Chaotische lagen -->
+  <div class="layer-sun" aria-hidden="true"></div>
+  <div class="stickers" id="stickers" aria-hidden="true"></div>
+  <div class="layer-waves" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card">
+      <header>
+        <h1>De Boys‑Trip Beslis‑Machine ☀️🎲</h1>
+        <p>Niemand kan kiezen? Wauw, verrassing. Laat deze overenthousiaste zonnegod jullie lot bepalen: Tenerife‑style met extra chaos.</p>
+      </header>
+
+      <div class="controls">
+        <div class="input" title="Voeg 2–10 items toe">
+          <span style="font-size:1.2rem">📝</span>
+          <input id="itemInput" maxlength="40" placeholder="Voeg een optie toe (bv. Tapas, Chinees, Noedels)…" />
+          <button class="btn btn--ghost" id="addBtn"><span class="sparkle"></span>➕ Voeg toe</button>
+        </div>
+        <button class="btn" id="randomBtn" title="Kies er eentje!"><span class="sparkle"></span>🎰 Tenerandomize!</button>
+      </div>
+
+      <div class="chips" id="chips"></div>
+      <div class="status" id="status">0/10 items. Minimaal 2 nodig om te beslissen.</div>
+
+      <div class="actions">
+        <button class="btn btn--ghost" id="shuffleBtn" title="Schud de lijst voor pure placebo‑controle"><span class="sparkle"></span>🔀 Schud lijst</button>
+        <button class="btn btn--ghost" id="clearBtn" title="Paniekknop voor wispelturigheid"><span class="sparkle"></span>🧹 Reset</button>
+      </div>
+
+      <div class="result" id="resultBox" aria-live="polite">
+        <div class="badge">AI Approved 🌞</div>
+        <div class="slot" id="slot">Voeg eerst opties toe…</div>
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+      </div>
+
+      <div class="snark">
+        <span>🗣️</span>
+        <span><b>TIP:</b> Hoe langer je niet beslist, hoe meer je kan wachten. 🍻</span>
+      </div>
+    </section>
+
+    <footer>
+      Gemaakt met te veel zin in zon, surfen, en wandelen.
+    </footer>
+  </main>
+
+  <script>
+    // --- State & helpers ---
+    const MAX_ITEMS = 10;
+    const MIN_ITEMS = 2;
+    const STORAGE_KEY = 'boysTripItems';
+    const emojis = ["☀️","🚗","🏄‍♂️","🏄","🥾","🤿","🛶","🌋","🌊","🏖️","🌴","🕶️","🍍","🌅","🗺️","🧉"];
+
+    const input = document.getElementById('itemInput');
+    const addBtn = document.getElementById('addBtn');
+    const chips = document.getElementById('chips');
+    const status = document.getElementById('status');
+    const randomBtn = document.getElementById('randomBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const slot = document.getElementById('slot');
+    const resultBox = document.getElementById('resultBox');
+    const confettiBox = document.getElementById('confetti');
+    const stickersWrap = document.getElementById('stickers');
+
+    let items = loadItems();
+    renderAll();
+
+    // Chaotische stickers genereren
+    createStickers(28);
+
+    function createStickers(count){
+      for(let i=0;i<count;i++){
+        const s = document.createElement('div');
+        s.className = 'sticker';
+        s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        const x = Math.random()*100; const y = Math.random()*100;
+        const dur = 8 + Math.random()*10;
+        s.style.left = x + 'vw';
+        s.style.top = y + 'vh';
+        s.style.setProperty('--dur', dur+'s');
+        s.style.opacity = 0.6 + Math.random()*0.4;
+        stickersWrap.appendChild(s);
+      }
+      // extra: rijdende auto die af en toe langs scheurt
+      setInterval(()=>{
+        const car = document.createElement('div');
+        car.className='sticker';
+        car.textContent='🚗';
+        car.style.left='-10vw';
+        car.style.top= (20 + Math.random()*60)+'vh';
+        car.style.fontSize='clamp(20px, 6vmin, 64px)';
+        car.style.animation='none';
+        car.animate([
+          { transform: 'translateX(0)' },
+          { transform: 'translateX(120vw)' }
+        ], { duration: 5000+Math.random()*2000, easing:'cubic-bezier(.2,.8,.2,1)' });
+        stickersWrap.appendChild(car);
+        setTimeout(()=>car.remove(), 7500);
+      }, 5000);
+    }
+
+    // Events
+    addBtn.addEventListener('click', addItem);
+    input.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){ addItem(); }
+    });
+    randomBtn.addEventListener('click', spin);
+    shuffleBtn.addEventListener('click', ()=>{ shuffle(items); saveItems(); renderAll(); nudge('Lijst geschud. Niet dat het helpt.'); });
+    clearBtn.addEventListener('click', ()=>{ items=[]; saveItems(); renderAll(); nudge('Reset! Terug bij af. Klassiek.'); });
+
+    function addItem(){
+      const val = input.value.trim();
+      if(!val) return nudge('Typ iets in, kampioen.');
+      if(items.length >= MAX_ITEMS) return nudge('Maximaal 10 opties. De chaos heeft grenzen.');
+      if(items.map(i=>i.toLowerCase()).includes(val.toLowerCase())) return nudge('Dubbelop. Wees origineel 😉');
+      items.push(val);
+      input.value='';
+      saveItems(); renderAll();
+      bounce(slot);
+      nudge(`Toegevoegd: “${val}”`);
+      if(items.length === MIN_ITEMS) nudge('Top. Nu kun je loten.');
+    }
+
+    function removeItem(idx){
+      items.splice(idx,1);
+      saveItems(); renderAll();
+      nudge('Weg ermee. Zo besluitvaardig kunnen jullie dus wél zijn.');
+    }
+
+    function renderAll(){
+      chips.innerHTML='';
+      items.forEach((txt, i)=>{
+        const el = document.createElement('span');
+        el.className='chip';
+        el.innerHTML = `<span>${txt}</span><button title="Verwijder" aria-label="Verwijder">✖</button>`;
+        el.querySelector('button').addEventListener('click', ()=>removeItem(i));
+        chips.appendChild(el);
+      });
+      status.textContent = `${items.length}/${MAX_ITEMS} items. Minimaal ${MIN_ITEMS} nodig om te loten.`;
+      if(items.length === 0) slot.textContent = 'Voeg eerst opties toe…';
+    }
+
+    function spin(){
+      if(items.length < MIN_ITEMS){
+        shake(resultBox);
+        return nudge('Minimaal 2 opties nodig. Anders is dit geen loting maar een soloproject.');
+      }
+      const rounds = 18 + Math.floor(Math.random()*12);
+      slot.classList.add('spin');
+      let i = 0;
+      let current = '';
+      const spinInterval = setInterval(()=>{
+        current = items[(i++) % items.length];
+        slot.textContent = randomSauce(current);
+      }, 90);
+
+      setTimeout(()=>{
+        clearInterval(spinInterval);
+        const winner = items[Math.floor(Math.random()*items.length)];
+        slot.classList.remove('spin');
+        slot.classList.add('win');
+        slot.textContent = bigWinSauce(winner);
+        burstConfetti();
+        setTimeout(()=>slot.classList.remove('win'), 900);
+        nudge(`Gekozen: ${winner}. Geen terugkrabbelen, alleen zonnebrand smeren.`);
+      }, rounds*100);
+    }
+
+    function randomSauce(txt){
+      const flair = ['☀️','🌊','🏄','🚗','🥾','🤿','🛶','🌋','🕶️','🔥','💥','✨'];
+      return txt + ' ' + flair[Math.floor(Math.random()*flair.length)];
+    }
+    function bigWinSauce(txt){
+      const frames = ['🔥','💥','✨','🌞','🏆','🎉','🍺'];
+      return `${frames[Math.floor(Math.random()*frames.length)]} ${txt} ${frames[Math.floor(Math.random()*frames.length)]}`;
+    }
+
+    function burstConfetti(){
+      confettiBox.innerHTML='';
+      const colors = ['#FFD166','#06D6A0','#118AB2','#EF476F','#FFE29A','#ffffff'];
+      const count = 160;
+      for(let i=0;i<count;i++){
+        const p = document.createElement('div');
+        p.className='p';
+        const left = Math.random()*100;
+        p.style.left = left + 'vw';
+        p.style.top = '-3vh';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.transform = `translateY(-10vh)`;
+        p.style.setProperty('--x', (Math.random()*60 - 30) + 'px');
+        p.style.setProperty('--rot', (Math.random()*720 - 360) + 'deg');
+        p.style.setProperty('--t', (1000 + Math.random()*1600) + 'ms');
+        p.style.setProperty('--r', (500 + Math.random()*1200) + 'ms');
+        confettiBox.appendChild(p);
+      }
+      setTimeout(()=> confettiBox.innerHTML='', 2200);
+    }
+
+    // UI feedback
+    function nudge(msg){
+      status.textContent = msg;
+      bounce(status);
+    }
+    function bounce(el){
+      el.animate([
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-6px)' },
+        { transform: 'translateY(0)' }
+      ], { duration: 300, easing: 'ease-out' });
+    }
+    function shake(el){
+      el.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-6px)' },
+        { transform: 'translateX(6px)' },
+        { transform: 'translateX(0)' }
+      ], { duration: 220, easing:'ease-in-out' });
+    }
+
+    // Storage
+    function saveItems(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)) }
+    function loadItems(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : seed();
+      }catch{ return seed() }
+    }
+    function seed(){
+      // Voor de sfeer: start met 2 default opties
+      //return ['Surfen in El Médano','Wandelen Teide bij zonsopgang'];
+    }
+
+    // Shuffle
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+  </script>
+</body>
+</html>
