@@ -382,17 +382,26 @@
     }
 
     function renderAll(){
-      chips.innerHTML='';
-      items.forEach((txt, i)=>{
+      chips.innerHTML = '';
+
+      // vang alles op wat geen array is
+      if (!Array.isArray(items)) {
+        console.warn('Items is geen array, reset naar []', items);
+        items = [];
+      }
+
+      items.forEach((txt, i) => {
         const el = document.createElement('span');
-        el.className='chip';
+        el.className = 'chip';
         el.innerHTML = `<span>${txt}</span><button title="Verwijder" aria-label="Verwijder">✖</button>`;
-        el.querySelector('button').addEventListener('click', ()=>removeItem(i));
+        el.querySelector('button').addEventListener('click', () => removeItem(i));
         chips.appendChild(el);
       });
+
       status.textContent = `${items.length}/${MAX_ITEMS} items. Minimaal ${MIN_ITEMS} nodig om te loten.`;
-      if(items.length === 0) slot.textContent = 'Voeg eerst opties toe…';
+      if (items.length === 0) slot.textContent = 'Voeg eerst opties toe…';
     }
+
 
     function spin(){
       if(items.length < MIN_ITEMS){
